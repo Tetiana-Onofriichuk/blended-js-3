@@ -53,3 +53,28 @@
     border-color: #ff6b0a;
   }
 }
+
+.button-more {
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 125px;
+  height: 40px;
+  background-color: #ff6b0a;
+  border: transparent;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.04em;
+  color: #fff;
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+  margin-top: 36px;
+}
+.button-more:hover {
+  background-color: #ed3b05;
+}
+.hiddenbtn {
+  display: block;
+  display: none;
+}
