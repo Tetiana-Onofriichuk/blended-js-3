@@ -9,6 +9,7 @@ import {
   getProducts,
   getCategoryProducts,
   getOneProduct,
+  getSearchProduct,
 } from './js/products-api';
 
 import { refs } from './js/refs';
@@ -19,12 +20,13 @@ import {
   showLoadMoreButton,
   hideLoadMoreButton,
   renderProductsAll,
-  renderModal,
 } from './js/render-function';
 
+import { renderModal } from './js/modal';
 refs.categories.addEventListener('click', handleClick);
 refs.loadMoreBtn.addEventListener('click', handleLoadMore);
 refs.products.addEventListener('click', cardclick);
+refs.form.addEventListener('submit', handlesubmit);
 
 let currentPage = 1;
 let currentCategory = null;
@@ -76,9 +78,9 @@ async function handleClick(event) {
 
   showCategoriesProducts(categoryId); // ⬅️ ДОДАЙ ЦЕЙ ВИКЛИК
 
-  async function showCategoriesProducts() {
+  async function showCategoriesProducts(id) {
     try {
-      const response = await getCategoryProducts(categoryId);
+      const response = await getCategoryProducts(id);
       const items = response.products;
       renderProducts(items);
       if (items.length >= 12) {
@@ -147,6 +149,38 @@ async function cardclick(event) {
     renderModal(product); // 🟢 Передаємо дані, а не просто id
   } catch (error) {
     console.log('❌ Помилка при отриманні продукту по ID:', error);
+    iziToast.error({
+      message: 'Сталася помилка при запиті!',
+      position: 'topRight',
+    });
+  }
+}
+
+async function handlesubmit(event) {
+  event.preventDefault();
+
+  const inputValue = refs.form.elements['searchValue'].value.trim();
+
+  if (inputValue === '') {
+    iziToast.warning({
+      message: 'Введіть назву зображення!',
+      position: 'topRight',
+    });
+    return;
+  }
+
+  try {
+    const response = await getSearchProduct(inputValue);
+
+    const products = response.products;
+    if (!products || products.length === 0) {
+      iziToast.info({ message: 'Нічого не знайдено за запитом.' });
+      return;
+    }
+
+    renderProducts(products);
+  } catch (error) {
+    console.error('❌ Помилка при запиті пошуку:', error);
     iziToast.error({
       message: 'Сталася помилка при запиті!',
       position: 'topRight',

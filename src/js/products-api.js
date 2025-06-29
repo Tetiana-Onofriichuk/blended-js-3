@@ -28,3 +28,10 @@ export async function getOneProduct(id) {
   const response = await axios.get(`${BASE_URL}${ENDPOINT}`);
   return response.data;
 }
+
+export async function getSearchProduct(q) {
+  const ENDPOINT = `/products/search?q=${encodeURIComponent(q)}`;
+  const response = await axios.get(`${BASE_URL}${ENDPOINT}`);
+  console.log('📦 API відповідь:', response.data);
+  return response.data;
+}
